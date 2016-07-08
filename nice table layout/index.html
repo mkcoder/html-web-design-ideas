@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background-color: #27363B;
+        }
+        table {
+            margin: 0 auto;
+            background: #fff;
+            border-collapse:collapse;
+            box-shadow: 1px 1px 25px rgba(0,0,0,1);
+        }
+        table tr {
+            width: 100px;
+            border: none;
+        }
+        table thead th {
+            color: #ffffff;
+            background: #27AE60;
+            width: 175px;
+            padding: 10px;
+        }
+        table tbody td:first-child {
+            text-align: left;
+        }
+        table tbody td {
+            text-align: center;
+            height: 25px;
+            padding: 10px;
+            font-weight: bold;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #AAB7B7;
+        }
+        table tbody tr:nth-child(odd) {
+            background-color: #98A3A3;
+        }
+        table tbody tr:hover {
+            background: #474747;
+            color: #ffffff;
+        }
+        #editable-box-template {
+            position: relative;
+        }
+        #editable-box-template input {
+        }
+
+        #editable-box-template button[type=submit].accept {
+            float: right;
+            background: none;
+            border: none;
+            background-color: #20c72d;
+            width: 25px;
+            height: 25px;
+            right: 0;
+            position: absolute;
+        }
+        #editable-box-template button[type=submit].deny {
+            float: right;
+            border: none;
+            background: none;
+            background-color: #f55b5b;
+            width: 25px;
+            height: 25px;
+            right: 25px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <small>double click too edit.</small>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Project 1</td>
+            <td>4</td>
+            <td>4</td>
+            <td>4</td>
+            <td>4</td>
+            <td>6</td>
+            <td>8</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Timeoff/Vacation</td>
+            <td>0</td>
+            <td>4</td>
+            <td>4</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Project 2</td>
+            <td>4</td>
+            <td>0</td>
+            <td>0</td>
+            <td>4</td>
+            <td>2</td>
+            <td>0</td>
+            <td>8</td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="editable-box-template">
+        <input type="text"  data-value="" />
+        <button type="submit" class="accept">✔</button>
+        <button type="submit" class="deny">X</button>
+    </div>
+    <button class="btn btn-add btn-green">+ new activity</button>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script>
+        (function ($) {
+            var clickCounter = 0, tempValue = 0;
+            let template = $('#editable-box-template').hide();
+
+            $('table tr td').on('click', function () {
+                if ( clickCounter != 2 ) {clickCounter++; return; }
+                if ( clickCounter > 2 ) { return; }
+                clickCounter++;
+                tempValue = $(this).text();
+                console.log(template.find('input[type=text]').val($(this).text()).parent().show());
+                $(this).text("");
+                $(this).addClass("editing");
+                $(this).append(template);
+            });
+            $('body').on('click', '.accept', function () {
+                clickCounter = 0;
+                let currentEditing = $('.editing');
+                currentEditing.text(currentEditing.find('input[type=text]').val());
+                currentEditing.removeClass('editing');
+            });
+            $('body').on('click', '.deny', function () {
+                clickCounter = 0;
+                let currentEditing = $('.editing');
+                currentEditing.text(tempValue);
+                currentEditing.removeClass('editing');
+            });
+
+        })(jQuery);
+    </script>
+</body>
+</html>
